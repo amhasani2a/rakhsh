@@ -5,8 +5,7 @@
 **A reflex-based, single-forward retrieval & decision core that learns from *your* data and *your* feedback.**
 Pure Python + NumPy · no GPU · no cloud · MCP server · REST API · web chat UI
 
-[فارسی](README.fa.md) · [Course (10 sessions)](docs/course/README.md) · [Architecture](docs/ARCHITECTURE.md)
-
+[فارسی](README.fa.md) · 
 </div>
 
 > In the Shahnameh, while Rostam slept, a lion attacked — and **Rakhsh**, his horse, killed it *before Rostam woke up*.
