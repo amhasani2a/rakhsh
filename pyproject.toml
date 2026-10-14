@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rakhsh"
+version = "1.0.0"
+description = "Rakhsh (رخش): a reflex-based, single-forward retrieval & decision core that learns from your data and your feedback — with MCP, HTTP and a web UI."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "Dyana Compton"}]
+keywords = ["retrieval", "search", "mcp", "agents", "neural-network", "persian", "rag", "router"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: Persian",
+  "Natural Language :: English",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Text Processing :: Indexing",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+formats = ["pypdf>=4", "python-docx>=1", "openpyxl>=3"]
+dev = ["mcp>=1.0"]
+
+[project.scripts]
+rakhsh = "rakhsh.adapters.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["rakhsh*"]
+
+[tool.setuptools.package-data]
+"rakhsh.adapters" = ["web/index.html"]

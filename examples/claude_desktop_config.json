@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "rakhsh": {
+      "command": "rakhsh",
+      "args": ["--trust", "claude-ai=0.8", "mcp", "--allow-dir", "/Users/YOU/Documents"],
+      "env": { "RAKHSH_HOME": "/Users/YOU/.rakhsh" }
+    }
+  }
+}

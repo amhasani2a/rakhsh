@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رخش · Rakhsh</title>
+<style>
+:root{
+  --bg:#FFFFFF;--surface:#F9F8F7;--surface2:#F0EFED;--border:#E6E5E3;--text:#2C2C2B;--muted:#7D7A75;
+  --blue:#2783DE;--blue-soft:#E5F2FC;--green:#46A171;--green-soft:#E8F1EC;--orange:#D5803B;--orange-soft:#FBEBDE;
+  --red:#E56458;--red-soft:#FCE9E7;--purple:#9A6DD7;--purple-soft:#F1EAFB;--r:8px;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#191919;--surface:#202020;--surface2:#2a2a29;--border:rgba(255,255,255,.16);--text:#fff;--muted:rgba(255,255,255,.65);
+  --blue:#5E9FE8;--blue-soft:rgba(94,159,232,.14);--green:#72BC8F;--green-soft:rgba(114,188,143,.14);--orange:#DE9255;--orange-soft:rgba(222,146,85,.14);
+  --red:#E97366;--red-soft:rgba(233,115,102,.14);--purple:#BF8EDA;--purple-soft:rgba(191,142,218,.14);--shadow:none}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:16px/1.6 "Vazirmatn","Segoe UI",Tahoma,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);display:flex}
+button{font:inherit;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:var(--r);padding:8px 12px;min-height:40px}
+button:hover{background:var(--surface2)} button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff} button.primary:hover{filter:brightness(1.08)}
+button:disabled{opacity:.5;cursor:default}
+/* ---------- sidebar ---------- */
+aside{width:340px;flex:none;border-left:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;overflow:auto}
+.brand{padding:20px 20px 12px;display:flex;gap:12px;align-items:center}
+.logo{width:40px;height:40px;border-radius:10px;background:var(--blue);display:grid;place-items:center;color:#fff;font-size:22px}
+.brand h1{font-size:17px;margin:0;line-height:1.3} .brand p{margin:0;font-size:13px;color:var(--muted)}
+.sec{padding:12px 20px;border-top:1px solid var(--border)}
+.sec h2{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 8px;letter-spacing:.2px}
+.drop{display:block;border:1.5px dashed var(--border);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;background:var(--bg);transition:.15s}
+.drop.over{border-color:var(--blue);background:var(--blue-soft)}
+.drop b{display:block;font-size:15px} .drop small{color:var(--muted);font-size:12.5px}
+textarea,input[type=text]{width:100%;font:inherit;font-size:14px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);padding:8px 10px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:8px}
+.srcs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.srcs li{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;font-size:14px}
+.srcs li span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .srcs li small{color:var(--muted)}
+.srcs li button{min-height:28px;padding:0 8px;border:none;background:none;color:var(--muted)}
+.status{font-size:13px;color:var(--muted);margin-top:8px}
+.bar{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .3s}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px}
+.stat b{display:block;font-size:18px;font-variant-numeric:tabular-nums} .stat small{color:var(--muted);font-size:12px}
+/* ---------- main ---------- */
+main{flex:1;display:flex;flex-direction:column;min-width:0}
+#chat{flex:1;overflow:auto;padding:32px 24px 16px}
+.wrap{max-width:820px;margin:0 auto}
+.welcome{text-align:center;padding:48px 16px;color:var(--muted)}
+.welcome h2{color:var(--text);font-size:26px;margin:0 0 8px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px}
+.pill{border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;font-size:14px;background:var(--surface);text-align:right;max-width:240px}
+.pill b{display:block;color:var(--text);font-size:14px}
+.msg{margin:0 0 24px} .user{display:flex;justify-content:flex-start}
+.user .b{background:var(--blue);color:#fff;border-radius:14px 14px 4px 14px;padding:10px 14px;max-width:75%}
+.bot .b{border:1px solid var(--border);border-radius:12px;background:var(--bg);box-shadow:var(--shadow);overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);font-size:12.5px;color:var(--muted)}
+.lv{font-weight:600;border-radius:6px;padding:2px 8px;font-size:12.5px}
+.lv0{background:var(--purple-soft);color:var(--purple)} .lv1{background:var(--green-soft);color:var(--green)} .lv2{background:var(--orange-soft);color:var(--orange)}
+.ans{padding:14px 16px 6px} .src{font-size:13px;color:var(--muted);margin-bottom:6px}
+.src b{color:var(--text)} .quote{border-right:3px solid var(--blue);padding-right:12px;margin:4px 0 8px;line-height:1.85}
+mark{background:var(--blue-soft);color:inherit;border-radius:3px;padding:0 2px}
+mark.x{background:var(--orange-soft);border-bottom:1.5px dotted var(--orange)}
+table.f{border-collapse:collapse;width:100%;font-size:14px;margin:4px 0 8px}
+table.f td{border-bottom:1px solid var(--border);padding:6px 8px;vertical-align:top} table.f td:first-child{color:var(--muted);width:30%;white-space:nowrap}
+.warn{background:var(--orange-soft);color:var(--text);border-radius:var(--r);padding:8px 12px;font-size:14px;margin:4px 0 8px}
+details{font-size:14px;margin:4px 0} summary{cursor:pointer;color:var(--muted);padding:4px 0}
+.ctx{background:var(--surface);border-radius:var(--r);padding:10px 12px;line-height:1.85;margin-top:6px}
+.spk{display:flex;flex-wrap:wrap;gap:4px;padding:4px 16px 12px}
+.chip{font-size:12px;border-radius:5px;padding:1px 7px;background:var(--surface2);color:var(--text)}
+.chip.x{background:var(--orange-soft);color:var(--orange)}
+.fb{display:flex;gap:8px;align-items:center;padding:10px 16px;border-top:1px solid var(--border);flex-wrap:wrap}
+.fb button{min-height:36px;padding:4px 12px}
+.fb .done{color:var(--green);font-size:13px}
+.learned{font-size:13px;color:var(--muted);padding:0 16px 12px;margin:0}
+.learned li{margin:2px 0}
+.alt{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--border);padding:8px 0}
+.alt div{flex:1;font-size:14px} .alt small{color:var(--muted);display:block}
+.alt button{min-height:32px;padding:2px 10px;font-size:13px;flex:none}
+.err{color:var(--red)}
+/* ---------- composer + live neurons ---------- */
+footer{border-top:1px solid var(--border);padding:12px 24px 20px;background:var(--bg)}
+.neuro{display:flex;gap:12px;align-items:center;min-height:30px;margin-bottom:8px;font-size:12.5px;color:var(--muted)}
+.gate{display:flex;width:150px;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex:none}
+.gate i{display:grid;place-items:center;font-style:normal;font-size:11px;transition:flex .2s;min-width:0;overflow:hidden;color:#fff}
+.gate i:nth-child(1){background:var(--purple)} .gate i:nth-child(2){background:var(--green)} .gate i:nth-child(3){background:var(--orange)}
+#neurons{display:flex;flex-wrap:wrap;gap:3px;flex:1;max-height:48px;overflow:hidden}
+#neurons span{font-size:12px;padding:0 6px;border-radius:4px;background:var(--blue-soft);color:var(--blue);animation:fire .35s ease-out}
+#neurons span.x{background:var(--orange-soft);color:var(--orange)}
+@keyframes fire{from{transform:scale(1.35);filter:brightness(1.6)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){#neurons span{animation:none}.bar i{transition:none}}
+.composer{display:flex;gap:8px;align-items:flex-end}
+.composer textarea{min-height:48px;max-height:160px;font-size:16px;padding:12px 14px;resize:none}
+.composer button{min-height:48px;padding:0 20px}
+.tog{display:none}
+@media (max-width:860px){
+  body{flex-direction:column} aside{width:100%;max-height:55vh;border-left:none;border-bottom:1px solid var(--border)}
+  aside.collapsed .sec{display:none} .tog{display:inline-flex;margin-inline-start:auto}
+  #chat{padding:16px} footer{padding:12px 16px 16px} .gate{width:110px}
+}
+</style>
+</head>
+<body>
+<aside id="side">
+  <div class="brand"><div class="logo" aria-hidden="true">🐎</div>
+    <div><h1>رخش · Rakhsh</h1><p>مغز واکنشی که از تو یاد می‌گیرد</p></div>
+    <button class="tog" id="tog" aria-label="نمایش پنل">☰</button></div>
+
+  <div class="sec">
+    <h2>🧠 مغز فعال</h2>
+    <div style="display:flex;gap:8px"><select id="brainSel" aria-label="انتخاب مغز" style="flex:1;font:inherit;padding:8px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text)"></select>
+    <button id="newBrain" title="ساخت مغز جدید">＋</button></div>
+  </div>
+  <div class="sec">
+    <h2>۱ · دانش بده</h2>
+    <label class="drop" id="drop" tabindex="0">
+      <b>📚 فایل را بکش و رها کن</b>
+      <small>کتاب، متن، CSV، JSON، SQLite، Excel، PDF، Word، HTML</small>
+      <input type="file" id="file" multiple hidden accept=".txt,.md,.csv,.tsv,.json,.jsonl,.db,.sqlite,.sqlite3,.xlsx,.pdf,.docx,.html,.htm">
+    </label>
+    <details style="margin-top:8px"><summary>✍️ یا متن را اینجا بچسبان</summary>
+      <input type="text" id="pname" placeholder="نام (اختیاری)" style="margin:6px 0">
+      <textarea id="ptext" rows="5" placeholder="متن کپی‌شده…"></textarea>
+      <div class="row"><button class="primary" id="padd">افزودن متن</button></div>
+    </details>
+    <div class="status" id="status">منتظر داده…</div>
+    <div class="bar"><i id="prog"></i></div>
+  </div>
+
+  <div class="sec"><h2>۲ · منابع</h2><ul class="srcs" id="srcs"><li><small>هنوز چیزی اضافه نشده</small></li></ul></div>
+
+  <div class="sec"><h2>۳ · وضعیت مغز</h2>
+    <div class="stats">
+      <div class="stat"><b id="s-ch">0</b><small>تکهٔ دانش</small></div>
+      <div class="stat"><b id="s-ne">0</b><small>نورون اسپایک</small></div>
+      <div class="stat"><b id="s-sy">0</b><small>سیناپس هبی</small></div>
+      <div class="stat"><b id="s-ep">0</b><small>نورون اپیزودیک</small></div>
+      <div class="stat"><b id="s-ga">–</b><small>دقت گیت</small></div>
+      <div class="stat"><b id="s-sa">–</b><small>رضایت اخیر</small></div>
+    </div>
+    <div class="row">
+      <button id="sleep" title="تثبیت حافظه: بازپخش تجربه‌ها در وزن‌های کند">😴 بخواب و تثبیت کن</button>
+      <button id="reset" title="پاک کردن همه چیز">↺ ریست</button>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div id="chat"><div class="wrap" id="msgs">
+    <div class="welcome" id="welcome">
+      <h2>هر چیزی بده، از خودش جواب می‌گیری</h2>
+      <div>کتاب یا دیتابیس آپلود کن. مغز خودش از داده سؤال می‌سازد و آموزش می‌بیند. بعد با هر 👍 و 👎 تو یاد می‌گیرد.</div>
+      <div class="pills">
+        <div class="pill"><b>⚡ یک فوروارد</b>معنا، اسپایک واژه‌ها و تصمیم عمق در یک ضرب ماتریسی</div>
+        <div class="pill"><b>🧬 یادگیری دو‌سرعته</b>سیناپس هبی آنی + گرادیان کند + خواب برای تثبیت</div>
+        <div class="pill"><b>🦵 قوس رفلکس</b>سؤال‌های تأییدشده بدون فکر، از حافظهٔ اپیزودیک جواب می‌گیرند</div>
+      </div>
+    </div>
+  </div></div>
+  <footer><div class="wrap">
+    <div class="neuro" aria-live="polite">
+      <div class="gate" title="گیت هزارد: احتمال توقف در هر سطح"><i style="flex:1">۰</i><i style="flex:1">۱</i><i style="flex:1">۲</i></div>
+      <div id="neurons"><span style="background:none;color:var(--muted);animation:none">نورون‌ها هنگام تایپ شلیک می‌کنند…</span></div>
+    </div>
+    <div class="composer">
+      <textarea id="q" rows="1" placeholder="سؤالت را بپرس…  (Enter = ارسال)" aria-label="سؤال"></textarea>
+      <button class="primary" id="send">ارسال</button>
+    </div>
+  </div></footer>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+/* token: open http://127.0.0.1:8765/#token=XYZ once; it is remembered locally */
+(() => { const m = location.hash.match(/token=([^&]+)/); if (m) { localStorage.setItem('rakhsh.token', decodeURIComponent(m[1])); history.replaceState(null, '', location.pathname); }})();
+let B = localStorage.getItem('rakhsh.brain') || 'default';
+async function raw(path, body){
+  const h = {}; const t = localStorage.getItem('rakhsh.token'); if (t) h['Authorization'] = 'Bearer ' + t;
+  if (body !== undefined) h['Content-Type'] = 'application/json';
+  const r = await fetch(path, body === undefined ? {headers:h} : {method:'POST', headers:h, body:JSON.stringify(body)});
+  return r.json();
+}
+const api = (path, body) => raw(path.replace(/^\/api\//, `/api/b/${encodeURIComponent(B)}/`), body);
+async function loadBrains(){
+  let o; try { o = await raw('/api/overview'); } catch { return; }
+  const names = (o.brains || []).map(b => b.name); if (!names.includes(B)) names.unshift(B);
+  $('#brainSel').innerHTML = names.map(n => `<option ${n===B?'selected':''}>${esc(n)}</option>`).join('');
+}
+function useBrain(n){ B = n; localStorage.setItem('rakhsh.brain', n); $('#msgs').innerHTML=''; loadBrains(); refresh(); }
+$('#brainSel').onchange = e => useBrain(e.target.value);
+$('#newBrain').onclick = () => { const n = (prompt('نام مغز جدید (حروف لاتین، عدد، - یا _):') || '').trim(); if (/^[A-Za-z0-9_-]{1,40}$/.test(n)) useBrain(n); else if (n) alert('نام نامعتبر'); };
+loadBrains();
+const segs = s => s.map(([t,h]) => h===1 ? `<mark>${esc(t)}</mark>` : h===2 ? `<mark class="x" title="واژه‌ای که ننوشتی ولی نورونش شلیک کرد">${esc(t)}</mark>` : esc(t)).join('');
+
+/* ---------------- state polling ---------------- */
+let training = false;
+async function refresh(){
+  let s; try { s = await api('/api/state'); } catch { $('#status').textContent = '⚠️ سرور در دسترس نیست'; return; }
+  training = s.status.state === 'training';
+  $('#status').textContent = s.status.message; $('#status').className = 'status' + (s.status.state==='error'?' err':'');
+  $('#prog').style.width = (s.status.state==='empty'?0:s.status.progress*100) + '%';
+  $('#srcs').innerHTML = s.sources.length ? s.sources.map(x => `<li><span title="${esc(x.name)}">${x.kind==='rows'?'🗂️':'📖'} ${esc(x.name)}</span>
+     <small>${fa(x.chunks)} ${x.kind==='rows'?'ردیف':'تکه'}</small><button aria-label="حذف ${esc(x.name)}" data-rm="${esc(x.name)}">×</button></li>`).join('')
+     : '<li><small>هنوز چیزی اضافه نشده</small></li>';
+  $('#s-ch').textContent = fa(s.chunks); $('#s-ne').textContent = fa(s.neurons);
+  $('#s-sy').textContent = fa(s.synapses); $('#s-ep').textContent = fa(s.episodes);
+  $('#s-ga').textContent = s.stats.gate_acc == null ? '–' : fa(Math.round(s.stats.gate_acc*100)) + '٪';
+  $('#s-sa').textContent = s.satisfaction == null ? '–' : fa(Math.round(s.satisfaction*100)) + '٪';
+}
+(function loop(){ refresh().finally(() => setTimeout(loop, training ? 700 : 2500)); })();
+$('#srcs').addEventListener('click', async e => { const n = e.target.dataset.rm; if (n && confirm(`«${n}» حذف شود؟`)) { await api('/api/remove', {name:n}); refresh(); }});
+
+/* ---------------- uploads ---------------- */
+function b64(buf){ let s = '', b = new Uint8Array(buf); for (let i=0;i<b.length;i+=0x8000) s += String.fromCharCode.apply(null, b.subarray(i,i+0x8000)); return btoa(s); }
+async function upload(files){
+  for (const f of files){
+    $('#status').textContent = `در حال خواندن ${f.name}…`;
+    const r = await api('/api/upload', {name:f.name, b64:b64(await f.arrayBuffer())});
+    if (r.error) { alert(`${f.name}: ${r.error}`); continue; }
+    sys(`📥 «${esc(r.source.name)}» اضافه شد — ${fa(r.source.chunks)} ${r.source.kind==='rows'?'ردیف':'تکه'}. مغز در حال خودآموزی است…`);
+  }
+  refresh();
+}
+const drop = $('#drop');
+drop.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); $('#file').click(); }});
+$('#file').addEventListener('change', e => { upload([...e.target.files]); e.target.value=''; });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => upload([...e.dataTransfer.files]));
+document.addEventListener('dragover', e => e.preventDefault()); document.addEventListener('drop', e => e.preventDefault());
+$('#padd').onclick = async () => {
+  const text = $('#ptext').value.trim(); if (!text) return;
+  const r = await api('/api/text', {name:$('#pname').value.trim(), text});
+  if (r.error) return alert(r.error);
+  $('#ptext').value=''; $('#pname').value=''; sys(`📝 متن «${esc(r.source.name)}» اضافه شد (${fa(r.source.chunks)} تکه).`); refresh();
+};
+$('#sleep').onclick = async () => {
+  $('#sleep').disabled = true; const r = await api('/api/sleep', {}); $('#sleep').disabled = false;
+  sys(r.error ? esc(r.error) : `😴 خواب تمام شد: ${fa(r.replayed)} خاطره در وزن‌های کند بازپخش شد. سیناپس‌های سریع ${fa(r.synapses_before)} → ${fa(r.synapses_after)}. دقت گیت: ${fa(Math.round(r.gate_acc*100))}٪`);
+  refresh();
+};
+$('#reset').onclick = async () => { if (confirm('همهٔ دانش و حافظه پاک شود؟')) { await api('/api/reset', {}); $('#msgs').innerHTML=''; refresh(); }};
+$('#tog').onclick = () => $('#side').classList.toggle('collapsed');
+if (matchMedia('(max-width:860px)').matches) $('#side').classList.add('collapsed');
+
+/* ---------------- chat ---------------- */
+function add(html, cls){ $('#welcome')?.remove(); const d = document.createElement('div'); d.className = 'msg ' + cls; d.innerHTML = html; $('#msgs').appendChild(d); $('#chat').scrollTop = 1e9; return d; }
+const sys = h => add(`<div class="b" style="color:var(--muted);font-size:14px">${h}</div>`, 'sys');
+
+function card(r){
+  const m = r.meta, a = r.answer;
+  const path = {'reflex-arc':'قوس رفلکس ← حافظهٔ اپیزودیک','gate':'تصمیم گیت','reflex-miss→1':'رفلکس خالی ← سطح ۱'}[m.path] || m.path;
+  const body = a.kind === 'row'
+    ? `<table class="f">${a.fields.map(([k,v]) => `<tr><td>${esc(k)}</td><td>${segs(v)}</td></tr>`).join('')}</table>`
+    : `<div class="quote">${segs(a.segments)}</div><details><summary>متن کامل این بخش</summary><div class="ctx">${segs(a.context)}</div></details>`;
+  const alts = r.hits.map(h => `<div class="alt"><div><small>${esc(h.source)} › ${esc(h.locator)}</small>${segs(h.segments)}</div>
+      <button data-pick="${h.chunk}">✓ این بود</button></div>`).join('');
+  return `<div class="b">
+    <div class="meta"><span class="lv lv${m.level}">سطح ${fa(m.level)} · ${esc(m.level_name)}</span>
+      <span>${esc(path)}</span><span>· K=${fa(m.k)}</span><span>· اطمینان ${fa(Math.round(m.confidence*100))}٪</span>
+      <span>· فوروارد ${fa(m.ms.forward)}ms</span></div>
+    <div class="ans"><div class="src">📍 <b>${esc(a.source)}</b> › ${esc(a.locator)}</div>
+      ${m.unsure ? '<div class="warn">🤔 مطمئن نیستم جواب این سؤال در داده‌هایت باشد؛ نزدیک‌ترین چیزی که پیدا کردم:</div>' : ''}
+      ${body}
+      ${alts ? `<details><summary>سایر نتایج (${fa(r.hits.length)})</summary>${alts}</details>` : ''}</div>
+    <div class="spk" title="نورون‌هایی که شلیک کردند (نارنجی = واژه‌ای که ننوشتی)">${m.spikes.map(([t,w,typed]) => `<span class="chip ${typed?'':'x'}">${esc(t)}</span>`).join('')}</div>
+    <div class="fb"><button data-fb="up" aria-label="درست بود">👍 درست</button><button data-fb="down" aria-label="غلط بود">👎 غلط</button>
+      <span class="done"></span></div></div>`;
+}
+
+async function ask(){
+  const q = $('#q').value.trim(); if (!q) return;
+  $('#q').value=''; grow(); add(`<div class="b">${esc(q)}</div>`, 'user');
+  const r = await api('/api/ask', {q});
+  if (r.error) return sys(`<span class="err">${esc(r.error)}</span>`);
+  const el = add(card(r), 'bot');
+  el.addEventListener('click', async e => {
+    const kind = e.target.dataset.fb || (e.target.dataset.pick !== undefined ? 'pick' : null);
+    if (!kind) return;
+    el.querySelectorAll('[data-fb],[data-pick]').forEach(b => b.disabled = true);
+    const f = await api('/api/feedback', {id:r.id, kind, chunk: e.target.dataset.pick});
+    el.querySelector('.done').textContent = f.error ? f.error : (kind==='down' ? '✓ یاد گرفتم. اگر جواب درست در «سایر نتایج» هست، انتخابش کن.' : '✓ یاد گرفتم');
+    if (kind === 'down') el.querySelectorAll('[data-pick]').forEach(b => b.disabled = false);
+    if (f.learned) el.querySelector('.b').insertAdjacentHTML('beforeend', `<ul class="learned">${f.learned.map(x => `<li>🧠 ${esc(x)}</li>`).join('')}</ul>`);
+    refresh();
+  });
+}
+$('#send').onclick = ask;
+const grow = () => { const t = $('#q'); t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 160) + 'px'; };
+$('#q').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }});
+
+/* ---------------- live neurons while typing ---------------- */
+let pt;
+$('#q').addEventListener('input', () => { grow(); clearTimeout(pt); pt = setTimeout(probe, 120); });
+async function probe(){
+  const p = await api('/api/probe', {q:$('#q').value});
+  const g = document.querySelectorAll('.gate i');
+  const stop = p.stop && p.stop.some(x => x > 0) ? p.stop : [1,1,1];
+  g.forEach((el,i) => { el.style.flex = Math.max(stop[i], 0.04); el.style.outline = p.level===i ? '2px solid var(--text)' : ''; el.textContent = p.level===i ? `سطح ${fa(i)}` : fa(i); });
+  $('#neurons').innerHTML = (p.spikes||[]).map(([t,w,typed]) => `<span class="${typed?'':'x'}" style="opacity:${Math.min(1,.35+w/2.5)}">${esc(t)}</span>`).join('')
+    || '<span style="background:none;color:var(--muted);animation:none">نورون‌ها هنگام تایپ شلیک می‌کنند…</span>';
+}
+</script>
+</body>
+</html>

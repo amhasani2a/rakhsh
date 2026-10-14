@@ -1,0 +1,5 @@
+numpy>=1.24
+# optional file formats
+pypdf>=4
+python-docx>=1
+openpyxl>=3
