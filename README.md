@@ -270,5 +270,3 @@ python -m unittest discover -s tests -t .     # ~15 s
 zero: vectors → tokenisation → BM25 → a neuron → autograd → contrastive learning → spikes → the hazard gate →
 plasticity → systems engineering. Each session has runnable code, exercises and a challenge; solutions included.
 
-## License
-MIT © 2026 Dyana Compton
